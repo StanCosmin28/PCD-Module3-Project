@@ -1,0 +1,7 @@
+.day-card {
+    transition: transform 0.1s;
+
+    &:hover {
+        transform: translateX(4px);
+    }
+}
