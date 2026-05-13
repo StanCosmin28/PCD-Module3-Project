@@ -29,23 +29,29 @@ def evaluate_room(predictions: np.ndarray, labels: pd.DataFrame) -> dict:
 
 
 LLUMIGUANO_RESULTS = {
-    "Convolutional_Autoencoder": {
-        "BATHROOM": {"precision": 0.82, "recall": 0.79, "f1_score": 0.80},
-        "BEDROOM": {"precision": 0.79, "recall": 0.81, "f1_score": 0.80},
-        "KITCHEN": {"precision": 0.85, "recall": 0.83, "f1_score": 0.84},
-        "LIVING_ROOM": {"precision": 0.80, "recall": 0.78, "f1_score": 0.79},
+    "Autoencoder_P90": {
+        "BATHROOM": {"precision": 0.85, "recall": 1.00, "f1_score": 0.92},
+        "BEDROOM": {"precision": 0.73, "recall": 1.00, "f1_score": 0.85},
+        "KITCHEN": {"precision": 0.88, "recall": 1.00, "f1_score": 0.94},
+        "LIVING_ROOM": {"precision": 0.86, "recall": 1.00, "f1_score": 0.93},
     },
-    "Isolation_Forest_baseline": {
-        "BATHROOM": {"precision": 0.72, "recall": 0.68, "f1_score": 0.70},
-        "BEDROOM": {"precision": 0.70, "recall": 0.65, "f1_score": 0.67},
-        "KITCHEN": {"precision": 0.75, "recall": 0.71, "f1_score": 0.73},
-        "LIVING_ROOM": {"precision": 0.71, "recall": 0.66, "f1_score": 0.68},
+    "Autoencoder_P98": {
+        "BATHROOM": {"precision": 1.00, "recall": 1.00, "f1_score": 1.00},
+        "BEDROOM": {"precision": 0.93, "recall": 1.00, "f1_score": 0.96},
+        "KITCHEN": {"precision": 0.96, "recall": 1.00, "f1_score": 0.98},
+        "LIVING_ROOM": {"precision": 0.95, "recall": 1.00, "f1_score": 0.98},
+    },
+    "Isolation_Forest": {
+        "BATHROOM": {"precision": 0.97, "recall": 0.80, "f1_score": 0.87},
+        "BEDROOM": {"precision": 0.97, "recall": 0.80, "f1_score": 0.87},
+        "KITCHEN": {"precision": 0.97, "recall": 0.80, "f1_score": 0.87},
+        "LIVING_ROOM": {"precision": 0.97, "recall": 0.80, "f1_score": 0.87},
     },
     "OC_SVM": {
-        "BATHROOM": {"precision": 0.74, "recall": 0.70, "f1_score": 0.72},
-        "BEDROOM": {"precision": 0.72, "recall": 0.67, "f1_score": 0.69},
-        "KITCHEN": {"precision": 0.77, "recall": 0.73, "f1_score": 0.75},
-        "LIVING_ROOM": {"precision": 0.73, "recall": 0.68, "f1_score": 0.70},
+        "BATHROOM": {"precision": 0.79, "recall": 1.00, "f1_score": 0.88},
+        "BEDROOM": {"precision": 0.79, "recall": 1.00, "f1_score": 0.88},
+        "KITCHEN": {"precision": 0.79, "recall": 1.00, "f1_score": 0.88},
+        "LIVING_ROOM": {"precision": 0.79, "recall": 1.00, "f1_score": 0.88},
     },
 }
 
