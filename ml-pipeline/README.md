@@ -46,55 +46,11 @@ Llumiguano et al. trained their models (Convolutional Autoencoder, Isolation For
 4. **Generate explanations** (`explainer.py`): For each detected anomaly, SHAP TreeExplainer identifies which time slots contributed most to the anomaly score
 5. **Build comparison table** (`evaluate.py`): Places our results next to Llumiguano et al.'s reported metrics
 
-### Dashboard Phase (next — what the backend/frontend will do)
-
-1. New sensor data comes in for today (or any day the caregiver wants to check)
-2. Backend computes the same 96 time-slot features from the raw events
-3. Scaler transforms the new data — subtracts mean and divides by std learned during training. This puts the new day on the same scale the model expects.
-4. Scaled features go into the Isolation Forest → returns: anomaly or normal + confidence score
-5. If anomaly: SHAP explains which time slots were unusual (e.g., "bedroom had 0 activations at 02:00-04:00, normally there are 15-20 — this contributed 40% to the anomaly flag")
-6. Dashboard displays: "Tuesday was flagged as unusual. Main reason: no bedroom activity during typical sleep hours."
-
-## Results
-
-### F1-Scores (our model vs Llumiguano et al. baselines)
-
-| Room | Our IF+SHAP | Conv. Autoencoder | Their IF | OC-SVM |
-|------|-------------|-------------------|----------|--------|
-| BATHROOM | 0.627 | 0.80 | 0.70 | 0.72 |
-| BEDROOM | **0.904** | 0.80 | 0.67 | 0.69 |
-| KITCHEN | **0.955** | 0.84 | 0.73 | 0.75 |
-| LIVING_ROOM | **0.860** | 0.79 | 0.68 | 0.70 |
-
-**Note**: Llumiguano comparison values are placeholders — replace with actual numbers from their paper.
-
-### Detailed Metrics
-
-| Room | Precision | Recall | F1 | TP | FP | TN | FN |
-|------|-----------|--------|------|----|----|----|----|
-| BATHROOM | 1.000 | 0.456 | 0.627 | 26 | 0 | 71 | 31 |
-| BEDROOM | 0.825 | 1.000 | 0.904 | 52 | 11 | 65 | 0 |
-| KITCHEN | 0.915 | 1.000 | 0.955 | 75 | 7 | 46 | 0 |
-| LIVING_ROOM | 0.961 | 0.778 | 0.860 | 49 | 2 | 63 | 14 |
-
-### Observations
-
-- **Bedroom and Kitchen**: Perfect recall (catches all anomalies), high precision
-- **Bathroom**: Perfect precision (never false alarms) but low recall — the model is too conservative. Tunable via `contamination` parameter.
-- **Our differentiator**: Same or better detection than their IF baseline, but we add SHAP explanations (which time slots deviated and by how much)
 
 ## Output Files
 
 All in `ml-pipeline/outputs/`:
 
-| File | What it contains |
-|------|-----------------|
-| `evaluation_results.json` | Precision, Recall, F1, TP/FP/TN/FN per room |
-| `comparison_table.csv` | Our results vs Llumiguano baselines in CSV |
-| `explanations.json` | SHAP feature attributions for every detected anomaly |
-| `shap_summary_{ROOM}.png` | Overall feature importance plot (which time slots matter most) |
-| `shap_example_{ROOM}.png` | Bar chart for one specific anomaly (visual explanation) |
-| `model_{ROOM}.joblib` | Trained model + scaler (for backend API to load) |
 
 ## How to Run Locally
 
@@ -128,34 +84,3 @@ cd /Users/teov/Documents/Master/PCD/TemaPaper/project/ml-pipeline
 
 This takes ~30-60 seconds and produces all outputs in `ml-pipeline/outputs/`.
 
-### View Results
-
-```bash
-# Evaluation metrics
-cat outputs/evaluation_results.json
-
-# Comparison table
-cat outputs/comparison_table.csv
-
-# Open SHAP plots
-open outputs/shap_summary_KITCHEN.png
-open outputs/shap_example_KITCHEN.png
-
-# Read explanations (first 2 entries for kitchen)
-python3 -c "import json; d=json.load(open('outputs/explanations.json')); [print(json.dumps(e,indent=2)) for e in d['KITCHEN'][:2]]"
-```
-
-### Important: Use `../venv/bin/python` Not Just `python`
-
-If you have `mise` installed, it overrides the `python` command even after `source venv/bin/activate`. Always use the explicit venv path:
-
-```bash
-../venv/bin/python -m src.pipeline
-```
-
-## What's Next
-
-1. **FastAPI backend** — loads `.joblib` models, exposes endpoints for daily summaries, anomaly detection, and SHAP explanations
-2. **React dashboard** — visualizes daily timelines, anomaly cards with explanations, confidence scores
-3. **MongoDB** — stores processed results for the dashboard to query
-4. **Tuning** — adjust `contamination` for bathroom, potentially try different `n_estimators`
