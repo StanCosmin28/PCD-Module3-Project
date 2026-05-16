@@ -1,0 +1,26 @@
+# Build context is the project root so the image can include both
+# `backend/` (code) and `ml-pipeline/outputs/` (.joblib models).
+#
+# Invoke from the project root with:
+#   gcloud builds submit \
+#     --config cloudbuild-backend.yaml \
+#     --substitutions=_REGION=europe-west1,_PROJECT_ID=$(gcloud config get-value project)
+
+substitutions:
+  _REGION: europe-west1
+  _SERVICE: caregiver-backend
+  _PROJECT_ID: ""
+
+images:
+  - ${_REGION}-docker.pkg.dev/${_PROJECT_ID}/caregiver/${_SERVICE}:latest
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --file=backend/Dockerfile
+      - --tag=${_REGION}-docker.pkg.dev/${_PROJECT_ID}/caregiver/${_SERVICE}:latest
+      - .
+
+options:
+  logging: CLOUD_LOGGING_ONLY

@@ -1,9 +1,11 @@
+import os
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 
-SECRET_KEY = "dev-secret-key-change-in-production"
+# Injected via env on Cloud Run; falls back to a dev-only value for local runs.
+SECRET_KEY = os.getenv("JWT_SECRET", "dev-secret-key-change-in-production")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 

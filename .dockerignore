@@ -1,0 +1,24 @@
+# Project-level .dockerignore (gcloud builds submit . uses this)
+**/__pycache__
+**/*.pyc
+**/.venv
+**/venv
+**/.env
+**/.env.*
+!.env.example
+**/.DS_Store
+**/.git
+**/.gitignore
+**/node_modules
+**/dist
+frontend/
+data/raw/
+data/zenodo_test/
+ml-pipeline/src/
+ml-pipeline/__main__.py
+ml-pipeline/outputs/*.png
+ml-pipeline/outputs/*.txt
+ml-pipeline/outputs/*.csv
+documents/
+*.md
+!README.md

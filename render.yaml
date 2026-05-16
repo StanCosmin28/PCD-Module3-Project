@@ -1,0 +1,53 @@
+# Render Blueprint — defines both backend and frontend as code.
+# Render picks this up automatically when you create a new Blueprint
+# from this repo (https://dashboard.render.com/blueprints).
+#
+# Region "frankfurt" is the closest Render region to Romania.
+# Both services use the free plan — backend sleeps after 15 min idle,
+# frontend (static) is always on with global CDN.
+
+services:
+  # ---------------------------------------------------------------
+  # Backend — FastAPI + ML models, served from Docker
+  # ---------------------------------------------------------------
+  - type: web
+    name: caregiver-backend
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    healthCheckPath: /
+    envVars:
+      # Set these in Render dashboard after the service is created.
+      # sync: false  → never written to git, prompted in UI on first deploy.
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: MONGO_DB_NAME
+        value: pcd-module3-project
+
+  # ---------------------------------------------------------------
+  # Frontend — React static bundle, served from Render's CDN
+  # ---------------------------------------------------------------
+  - type: web
+    name: caregiver-frontend
+    runtime: static
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    envVars:
+      # Set this to the backend URL AFTER backend is deployed:
+      #   https://caregiver-backend.onrender.com
+      - key: VITE_API_BASE_URL
+        sync: false
+    routes:
+      # SPA fallback so React Router handles unknown paths
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable

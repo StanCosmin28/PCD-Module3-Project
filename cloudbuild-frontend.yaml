@@ -1,0 +1,26 @@
+# Build context is the `frontend/` folder.
+#
+# Invoke from the project root with:
+#   gcloud builds submit ./frontend \
+#     --config cloudbuild-frontend.yaml \
+#     --substitutions=_REGION=europe-west1,_PROJECT_ID=$(gcloud config get-value project),_API_URL=https://caregiver-backend-xxx.run.app
+
+substitutions:
+  _REGION: europe-west1
+  _SERVICE: caregiver-frontend
+  _PROJECT_ID: ""
+  _API_URL: ""
+
+images:
+  - ${_REGION}-docker.pkg.dev/${_PROJECT_ID}/caregiver/${_SERVICE}:latest
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - --build-arg=VITE_API_BASE_URL=${_API_URL}
+      - --tag=${_REGION}-docker.pkg.dev/${_PROJECT_ID}/caregiver/${_SERVICE}:latest
+      - .
+
+options:
+  logging: CLOUD_LOGGING_ONLY

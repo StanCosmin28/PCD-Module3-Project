@@ -20,9 +20,10 @@ data/zenodo_test/
 *.csv.gz
 
 # ML outputs
-ml-pipeline/outputs/*.joblib
+# NOTE: .joblib models are NOT ignored — they must be committed so the
+# Render Docker build can bundle them into the backend image. They are
+# only a few MB each (Isolation Forest on 96-feature data).
 ml-pipeline/outputs/*.png
-ml-pipeline/outputs/*.json
 ml-pipeline/outputs/*.txt
 
 # Jupyter

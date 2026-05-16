@@ -1,0 +1,50 @@
+{
+  "BATHROOM": {
+    "precision": 1.0,
+    "recall": 0.4561,
+    "f1_score": 0.6265,
+    "true_positives": 26,
+    "false_positives": 0,
+    "true_negatives": 71,
+    "false_negatives": 31,
+    "total_samples": 128,
+    "total_anomalies": 57,
+    "predicted_anomalies": 26
+  },
+  "BEDROOM": {
+    "precision": 0.8254,
+    "recall": 1.0,
+    "f1_score": 0.9043,
+    "true_positives": 52,
+    "false_positives": 11,
+    "true_negatives": 65,
+    "false_negatives": 0,
+    "total_samples": 128,
+    "total_anomalies": 52,
+    "predicted_anomalies": 63
+  },
+  "KITCHEN": {
+    "precision": 0.9146,
+    "recall": 1.0,
+    "f1_score": 0.9554,
+    "true_positives": 75,
+    "false_positives": 7,
+    "true_negatives": 46,
+    "false_negatives": 0,
+    "total_samples": 128,
+    "total_anomalies": 75,
+    "predicted_anomalies": 82
+  },
+  "LIVING_ROOM": {
+    "precision": 0.9608,
+    "recall": 0.7778,
+    "f1_score": 0.8596,
+    "true_positives": 49,
+    "false_positives": 2,
+    "true_negatives": 63,
+    "false_negatives": 14,
+    "total_samples": 128,
+    "total_anomalies": 63,
+    "predicted_anomalies": 51
+  }
+}

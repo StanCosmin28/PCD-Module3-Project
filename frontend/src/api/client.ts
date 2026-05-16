@@ -1,5 +1,6 @@
-// TODO: get this through env vars when deployed to cloud
-const API_BASE_URL = "http://localhost:8000";
+// Set at build time via Vite (--build-arg VITE_API_BASE_URL=... in Docker).
+// Falls back to localhost so `npm run dev` keeps working without any env file.
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
 
 let token = localStorage.getItem("token") ?? "";
 
